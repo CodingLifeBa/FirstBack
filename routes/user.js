@@ -1,67 +1,49 @@
-// routes/user.js
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const User = require('../models/user');
-const jwt= require('jsonwebtoken');
+const express = require("express");
 const router = express.Router();
 
-// Route pour enregistrer un nouvel utilisateur
-router.post('/register', async (req, res) => {
-    try {
-        const { nom, email, password } = req.body;
+const userCtrl = require("../controllers/user");
+const authMiddleware = require("../middleware/auth");
+const User = require("../models/user");
 
-        // Vérifier si l'utilisateur existe déjà
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ msg: 'User already exists' });
-        }
+router.post("/signup", userCtrl.signup);
+router.post("/login", userCtrl.login);
 
-        // Créer un nouvel utilisateur
-        user = new User({
-            nom,
-            email,
-            password
-        });
 
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
+router.post("/forgetPassword", userCtrl.forgetPassword);
+//router.post("/reset/:token", userCtrl.resetPassword);
 
-        await user.save();
-        
-        res.status(201).json({ msg: 'User registered successfully' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
+
+router.get("/profile", authMiddleware, (req, res) => {
+  User.findById(req.auth.userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "Utilisateur non trouvé" });
+      }
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération de l'utilisateur" });
+    });
 });
 
+router.put("/profile", authMiddleware, (req, res) => {
+  let updateValues = { ...req.body };
 
-// Route pour le login d'un utilisateur
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  delete updateValues._id;
+  delete updateValues._userId;
 
-        // Vérifier si l'utilisateur existe
-        let user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ msg: 'Invalid Credentials' });
-        }
-
-        // Comparer le mot de passe
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid Credentials' });
-        }
-        
-
-        res.status(200).json({ msg: 'User logged in successfully' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
+  User.findOneAndUpdate({ _id: req.auth.userId }, updateValues, { new: true })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+      }
+      res.status(200).json({ message: "Utilisateur modifié!", user });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
 });
-
-
-
 
 module.exports = router;
