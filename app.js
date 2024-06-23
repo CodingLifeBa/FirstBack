@@ -35,4 +35,16 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/meshotels", hotelRoutes);
 app.use("/api/auth", userRoutes);
 
+
+app.get("/api/info", (req, res) => {
+  res.send(`Backend URL is ${process.env.BACKEND_URL}`);
+});
+
+const PORT = process.env.PORT || 3000; // Utiliser la variable d'environnement pour le port
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+
+
 module.exports = app;
