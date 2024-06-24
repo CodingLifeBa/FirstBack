@@ -16,6 +16,15 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
+app.use(cors(
+  {
+    origin:["https://"],
+    methods:["POST","GET"],
+    credentials:true
+  }
+   
+));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
