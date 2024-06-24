@@ -5,6 +5,7 @@ const hotelRoutes = require("./routes/meshotels");
 const userRoutes = require("./routes/user");
 const app = express();
 const path = require("path");
+const cors = require("cors");
 app.use(express.json());
 require('dotenv').config(); 
 
