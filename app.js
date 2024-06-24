@@ -18,7 +18,7 @@ mongoose
 
 app.use(cors(
   {
-    origin:["https://"],
+    origin:["https://first-back-sigma.vercel.app"],
     methods:["POST","GET"],
     credentials:true
   }
