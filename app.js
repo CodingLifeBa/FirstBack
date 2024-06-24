@@ -21,7 +21,7 @@ mongoose
 app.use(cors()); // Utilisez le middleware CORS ici
 
 
-const allowedOrigins = ["https://first-back-sigma.vercel.app", "https://front-red-product.vercel.app"];
+const allowedOrigins = [ "https://front-red-product.vercel.app","https://first-back-sigma.vercel.app"];
 
 const corsOptions = {
   origin: function(origin, callback) {
