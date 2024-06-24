@@ -19,7 +19,7 @@ mongoose
 app.use(cors(
   {
     origin:["https://first-back-sigma.vercel.app"],
-    methods:["POST","GET"],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials:true
   }
    
