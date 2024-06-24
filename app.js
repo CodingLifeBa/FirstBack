@@ -20,12 +20,28 @@ mongoose
 
 app.use(cors()); // Utilisez le middleware CORS ici
 
-app.use(cors({
-  origin: ["http://first-back-sigma.vercel.app", "http://front-red-product.vercel.app"],
+
+const allowedOrigins = ["https://first-back-sigma.vercel.app", "https://front-red-product.vercel.app"];
+
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   allowedHeaders: 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+app.use(express.json());
 
 
   
