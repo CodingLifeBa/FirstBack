@@ -17,14 +17,11 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-app.use(cors(
-  {
-    origin:["https://first-back-sigma.vercel.app"],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials:true
-  }
-   
-));
+app.use(cors({
+  origin: ["https://first-back-sigma.vercel.app", "https://front-red-product.vercel.app"],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true
+}));
 
 
   
