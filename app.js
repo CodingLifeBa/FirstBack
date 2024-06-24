@@ -21,7 +21,7 @@ mongoose
 app.use(cors()); // Utilisez le middleware CORS ici
 
 app.use(cors({
-  origin: ["https://first-back-sigma.vercel.app", "https://front-red-product.vercel.app"],
+  origin: ["http://first-back-sigma.vercel.app", "http://front-red-product.vercel.app"],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   allowedHeaders: 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
   credentials: true
